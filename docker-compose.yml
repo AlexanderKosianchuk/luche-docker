@@ -148,6 +148,20 @@ services:
         - backend
         - mysqlnet
 
+### Sails Container #######################################
+
+    sails:
+      build: ./sails
+      ports:
+        - "${SAILS_PORT}:1337"
+      volumes:
+        - ${SAILS_PATH}:/var/www
+      working_dir: /var/www
+      environment:
+        - NODE_ENV=dev
+      networks:
+        - frontend
+
 ### MongoDB Container #######################################
 
     mongo:
