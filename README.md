@@ -12,3 +12,4 @@ docker ps
 docker images -a
 docker system prune -a
 docker inspect __ID__
+docker exec -it <containerIdOrName> bash
