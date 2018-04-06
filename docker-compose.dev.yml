@@ -7,3 +7,9 @@ services:
     applications:
       volumes:
         - ${APPLICATION}:/var/www
+    sails:
+      volumes:
+        - ${SAILS_PATH}:/var/www
+    apache2:
+      volumes:
+        - ${FRONT_PATH}:/var/www
