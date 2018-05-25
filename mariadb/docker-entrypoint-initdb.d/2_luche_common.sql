@@ -1114,6 +1114,7 @@ CREATE TABLE `fdrs` (
   `frame_syncro_code` varchar(8) NOT NULL,
   `preview_params` varchar(255) NOT NULL,
   `kml_export_script` text NOT NULL,
+  `model_url` varchar(255) NOT NULL,
   `id_user` int(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1121,8 +1122,8 @@ CREATE TABLE `fdrs` (
 -- Дамп данных таблицы `fdrs`
 --
 
-INSERT INTO `fdrs` (`id`, `name`, `code`, `step_length`, `step_divider`, `frame_length`, `word_length`, `aditional_info`, `header_length`, `header_scr`, `frame_syncro_code`, `preview_params`, `kml_export_script`, `id_user`) VALUES
-(1, 'Tester-U3_Su-27', 'tester_su27', 1, 8, 512, 2, 'weightto;weightlndg', 12800, '$headerTESTERLength = 512;\n \n$fileTESTERDesc = fopen($file, \'rb\');\n$headerTESTER = fread($fileTESTERDesc, $headerTESTERLength);\nfclose($fileTESTERDesc);\n \n$uH = unpack(\"H*\", $headerTESTER);\n \n$sH = str_split($uH[1], 2);\n  \n$day = 1;\n$month = 1;\n$year = 2017;\n$hour = 255 - (hexdec($sH[10]));\nif ($hour > 23) {\n  $hour = 0;\n}\n$min = 255 - (hexdec($sH[8]));\nif ($min > 59) {\n  $min = 0;\n}\n$sec = 255 - (hexdec($sH[6]));\nif ($sec > 59) {\n  $sec = 0;\n}\n$dt = new DateTime($year . \"-\" . $month . \"-\" . $day . \" \" .  	$hour . \":\" . $min . \":\" . $sec);\n$time = $dt->getTimestamp();\n$flightInfo[\'startCopyTime\'] = $time;\n           ', '', 'V;TGA;TGB;H', '', 1);
+INSERT INTO `fdrs` (`id`, `name`, `code`, `step_length`, `step_divider`, `frame_length`, `word_length`, `aditional_info`, `header_length`, `header_scr`, `frame_syncro_code`, `preview_params`, `kml_export_script`, `model_url`, `id_user`) VALUES
+(1, 'Tester-U3_Su-27', 'tester_su27', 1, 8, 512, 2, 'weightto;weightlndg', 12800, '$headerTESTERLength = 512;\n \n$fileTESTERDesc = fopen($file, \'rb\');\n$headerTESTER = fread($fileTESTERDesc, $headerTESTERLength);\nfclose($fileTESTERDesc);\n \n$uH = unpack(\"H*\", $headerTESTER);\n \n$sH = str_split($uH[1], 2);\n  \n$day = 1;\n$month = 1;\n$year = 2017;\n$hour = 255 - (hexdec($sH[10]));\nif ($hour > 23) {\n  $hour = 0;\n}\n$min = 255 - (hexdec($sH[8]));\nif ($min > 59) {\n  $min = 0;\n}\n$sec = 255 - (hexdec($sH[6]));\nif ($sec > 59) {\n  $sec = 0;\n}\n$dt = new DateTime($year . \"-\" . $month . \"-\" . $day . \" \" .  	$hour . \":\" . $min . \":\" . $sec);\n$time = $dt->getTimestamp();\n$flightInfo[\'startCopyTime\'] = $time;\n           ', '', 'V;TGA;TGB;H', '', '', 1);
 
 -- --------------------------------------------------------
 
