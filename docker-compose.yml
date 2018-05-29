@@ -55,10 +55,14 @@ services:
         - "${WORKSPACE_SSH_PORT}:22"
       tty: true
       networks:
-        - frontend
-        - backend
-        - redisnet
-        - mysqlnet
+        frontend:
+          ipv4_address: 172.0.0.2
+        backend:
+          ipv4_address: 172.1.0.2
+        mariadbnet:
+          ipv4_address: 172.2.0.2
+        redisnet:
+          ipv4_address: 172.3.0.2
 
 ### PHP-FPM Container #######################################
 
@@ -103,9 +107,12 @@ services:
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
       networks:
-        - backend
-        - redisnet
-        - mysqlnet
+        backend:
+          ipv4_address: 172.1.0.3
+        mariadbnet:
+          ipv4_address: 172.2.0.3
+        redisnet:
+          ipv4_address: 172.3.0.3
 
 ### NGINX Server Container ##################################
 
@@ -126,8 +133,10 @@ services:
       depends_on:
         - php-fpm
       networks:
-        - frontend
-        - backend
+        frontend:
+          ipv4_address: 172.0.0.4
+        backend:
+          ipv4_address: 172.1.0.4
 
 ### Apache Server Container #################################
 
@@ -145,7 +154,8 @@ services:
         - "${APACHE_HOST_HTTP_PORT}:80"
         - "${APACHE_HOST_HTTPS_PORT}:443"
       networks:
-        - frontend
+        frontend:
+          ipv4_address: 172.0.0.5
 
 ### phpMyAdmin Container ####################################
 
@@ -161,9 +171,12 @@ services:
       depends_on:
         - "${PMA_DB_ENGINE}"
       networks:
-        - frontend
-        - backend
-        - mysqlnet
+        frontend:
+          ipv4_address: 172.0.0.6
+        backend:
+          ipv4_address: 172.1.0.6
+        mariadbnet:
+          ipv4_address: 172.2.0.6
 
 ### Sails Container #######################################
 
@@ -177,8 +190,10 @@ services:
       environment:
         - NODE_ENV=dev
       networks:
-        - backend
-        - frontend
+        frontend:
+          ipv4_address: 172.0.0.7
+        backend:
+          ipv4_address: 172.1.0.7
 
 ### MongoDB Container #######################################
 
@@ -188,8 +203,10 @@ services:
         - "${MONGODB_PORT}:27017"
       volumes:
         - ${DATA_SAVE_PATH}/mongo:/data/db
+        #- mongo_data:/data/db"
       networks:
-        - backend
+        backend:
+          ipv4_address: 172.1.0.8
 
 ### MariaDB Container #######################################
 
@@ -197,6 +214,7 @@ services:
       build: ./mariadb
       volumes:
         - ${DATA_SAVE_PATH}/mariadb:/var/lib/mysql
+        #- mariadb_data:/var/lib/mysql
         - ${MARIADB_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${MARIADB_PORT}:3306"
@@ -206,7 +224,8 @@ services:
         - MYSQL_PASSWORD=${MARIADB_PASSWORD}
         - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
       networks:
-        - mysqlnet
+        mariadbnet:
+          ipv4_address: 172.2.0.9
 
 ### Redis Container #########################################
 
@@ -217,28 +236,55 @@ services:
       ports:
         - "${REDIS_PORT}:6379"
       networks:
-        - redisnet
+        redisnet:
+           ipv4_address: 172.3.0.10
 
 ### Networks Setup ############################################
 
 networks:
   frontend:
     driver: "bridge"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.0.0.0/24
+        gateway: 172.0.0.1
   backend:
     driver: "bridge"
-  mysqlnet:
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.1.0.0/24
+        gateway: 172.1.0.1
+  mariadbnet:
     driver: "bridge"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.2.0.0/24
+        gateway: 172.2.0.1
   redisnet:
     driver: "bridge"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.3.0.0/24
+        gateway: 172.3.0.1
 
 ### Volumes Setup #############################################
 
 volumes:
-  mysql:
-    driver: "local"
   redis:
-    driver: "local"
-  mongo:
     driver: "local"
   phpmyadmin:
     driver: "local"
+
+  mariadb:
+    driver: "local"
+  mongo:
+    driver: "local"
+
+#  mongo_data:
+#    external: true
+#  mariadb_data:
+#    external: true
