@@ -163,11 +163,12 @@ services:
       build: ./phpmyadmin
       environment:
         - PMA_ARBITRARY=1
+        - PMA_PORT=${MARIADB_PORT}
         - MYSQL_USER=${PMA_USER}
         - MYSQL_PASSWORD=${PMA_PASSWORD}
         - MYSQL_ROOT_PASSWORD=${PMA_ROOT_PASSWORD}
       ports:
-        - "${PMA_PORT}:80"
+        - "${PMA_HOST_PORT}:80"
       depends_on:
         - "${PMA_DB_ENGINE}"
       networks:
