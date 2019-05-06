@@ -3,4 +3,6 @@ FROM node:latest
 # some bash niceties
 ADD .bashrc /root/
 
-CMD ["npm", "start"]
+RUN npm install pm2 -g
+
+CMD ["pm2-runtime", "npm start"]
